@@ -14,5 +14,7 @@ export const CDN_COVER_IMAGE_URL = "https://image.erfi.io/tenhult_3.jpg";
 export const SOCIAL_LINKS = {
   github: "https://github.com/你的用户名",
   linkedin: "https://www.linkedin.com/in/你的用户名/",
-  instagram: "https://www.instagram.com/你的用户名/",
+  instagram: "https://www.instagram.com/UAHOO/",
 } as const;
+
+///////////

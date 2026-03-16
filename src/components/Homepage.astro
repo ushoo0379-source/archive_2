@@ -3,43 +3,117 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 export interface Props {
   title: string;
-  images: string;
+  images: string; // 这是一个 JSON 字符串
   alt: string;
   urls: string;
   width: Record<string, number>;
   height: Record<string, number>;
 }
 
-const { title, images, alt, urls, width, height } = Astro.props;
+const { title, images, alt, urls } = Astro.props;
+
+// 解析传递过来的数据
+const parsedImages = JSON.parse(images).small; // 我们用 small 尺寸，加载快且整齐
+const parsedUrls = JSON.parse(urls);
+const parsedAlts = JSON.parse(alt);
 ---
 
 <BaseLayout title={title} is404Page={false}>
-  <div
-    id="homepage"
-    class="flex justify-center items-center"
-    data-images={images}
-    data-alt={alt}
-    data-urls={urls}
-    data-width={JSON.stringify(width)}
-    data-height={JSON.stringify(height)}
-  >
-    <a href="#">
-      <picture>
-        <source media="(min-width: 1280px)" data-srcset-large />
-        <source media="(min-width: 768px)" data-srcset-medium />
-        <img
-          id="randomHomePageImage"
-          class="hidden h-[440px] sm:h-[600px] lg:h-[700px] xl:h-[1000px] object-contain w-full object-center"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-          alt="Loading image"
-          data-srcset-small
-        />
-      </picture>
-    </a>
-    <noscript>
-      <p class="text-center font-overpass-mono">JavaScript is required to display the homepage image.</p>
-    </noscript>
-    <slot />
+  <section class="showreel-container">
+    <video autoplay loop muted playsinline class="showreel-video">
+      <source src="/showreel.mp4" type="video/mp4" />
+    </video>
+    <div class="showreel-overlay">
+      <h1 class="showreel-title">SELECTED WORKS</h1>
+      <p class="showreel-subtitle">2024 - 2026</p>
+    </div>
+  </section>
+
+  <div class="grid-wrapper">
+    <div class="thumbnail-grid">
+      {parsedImages.map((img, index) => (
+        <a href={parsedUrls[index]} class="thumb-item group">
+          <img src={img} alt={parsedAlts[index]} class="thumb-img" loading="lazy" />
+          <div class="thumb-overlay">
+            <span class="text-white text-[10px] uppercase tracking-tighter text-center px-1">
+              {parsedAlts[index]}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
   </div>
+
+  <slot />
 </BaseLayout>
-<script src="../scripts/homePage.ts"></script>
+
+<style>
+  /* Showreel 样式 */
+  .showreel-container {
+    position: relative;
+    width: 100%;
+    height: 80vh; 
+    background: #000;
+    overflow: hidden;
+    margin-bottom: 0.5rem; /* 减少间距，让网格贴得更近 */
+  }
+  .showreel-video { width: 100%; height: 100%; object-fit: cover; }
+  .showreel-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(0, 0, 0, 0.2); color: white; pointer-events: none;
+  }
+  .showreel-title { font-size: 3rem; font-weight: 800; letter-spacing: -0.05em; margin: 0; }
+
+  /* 密集网格核心样式 */
+  .grid-wrapper {
+    width: 100%;
+    padding: 2px; /* 极细的外边距 */
+  }
+
+  .thumbnail-grid {
+    display: grid;
+    /* 核心：一行显示 6 个，手机显示 3 个 */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px; /* 连在一起的感觉 */
+  }
+
+  @media (min-width: 1024px) {
+    .thumbnail-grid {
+      grid-template-columns: repeat(6, 1fr); /* 电脑端一行 6 个 */
+    }
+  }
+
+  .thumb-item {
+    position: relative;
+    aspect-ratio: 1 / 1; /* 强制正方形 */
+    overflow: hidden;
+    background: #eee;
+  }
+
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .thumb-item:hover .thumb-img {
+    transform: scale(1.1); /* 悬停缩放 */
+  }
+
+  .thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .thumb-item:hover .thumb-overlay {
+    opacity: 1;
+  }
+</style>

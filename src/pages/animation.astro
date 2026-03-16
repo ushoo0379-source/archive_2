@@ -1,19 +1,26 @@
 ---
 import { getCollection } from "astro:content";
+// ✅ 挪出文件夹后，路径回归正常
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 import { sortByDate } from "../components/sortByDate";
-const pageTitle = "Zeitweilig";
-const allZeitweilig = await getCollection("zeitweilig");
+
+const pageTitle = "Animation";
+// 获取 content/animation 文件夹下的所有 MDX
+const allPosts = await getCollection("animation");
 ---
 
 <BaseLayout title={pageTitle} is404Page={false}>
   {
-    allZeitweilig
+    allPosts
       .sort(sortByDate)
       .map((post) => (
         <BlogPost
-          url={`/zeitweilig/${post.id}/`}
+          /* ✅ 这里的逻辑做了增强：
+             优先取 post.id (Astro 5.0 默认值) 
+             如果没有，则取 post.data.slug (MDX 里的 slug 字段)
+          */
+          url={`/animation/${post.id || post.data?.slug}/`}
           image={post.data?.image?.src || ""}
           alt={post.data?.image?.alt || ""}
           title={post.data?.title || ""}

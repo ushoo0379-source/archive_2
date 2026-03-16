@@ -6,15 +6,15 @@ export const SITE_AUTHOR = "Ushoo";
 
 /** CDN base URLs for remote images. */
 /** 这里的图标暂时还是原作者的，等你有自己的图了可以再换 */
-export const CDN_FAVICON_URL = "https://image.erfi.io/ea_favicon.png";
+export const CDN_FAVICON_URL = "https://raw.githubusercontent.com/ushoo0379-source/assets/main/my_logo.png";
 export const CDN_COVER_IMAGE_URL = "https://image.erfi.io/tenhult_3.jpg";
 
 /** Social media links. */
 /** 建议把下面的链接换成你真实的个人主页地址 */
 export const SOCIAL_LINKS = {
   github: "https://github.com/你的用户名",
-  linkedin: "https://www.linkedin.com/in/你的用户名/",
-  instagram: "https://www.instagram.com/UAHOO/",
+  linkedin: "https://www.linkedin.com/in/yushu-li-47798438b",
+  instagram: "https://instagram.com/ushoo00",
 } as const;
 
 ///////////

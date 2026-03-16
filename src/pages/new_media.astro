@@ -3,17 +3,22 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 import { sortByDate } from "../components/sortByDate";
-const pageTitle = "Short Form";
-const allShortForm = await getCollection("short_form");
+
+// ✅ 网页顶部显示的标题
+const pageTitle = "New Media"; 
+
+// ✅ 抓取 config.ts 中新定义的 new_media 集合
+const allPosts = await getCollection("new_media"); 
 ---
 
 <BaseLayout title={pageTitle} is404Page={false}>
   {
-    allShortForm
+    allPosts
       .sort(sortByDate)
       .map((post) => (
         <BlogPost
-          url={`/short_form/${post.id}/`}
+          /* ✅ 确保点击后的链接指向新的路由地址 */
+          url={`/new_media/${post.id}/`} 
           image={post.data?.image?.src || ""}
           alt={post.data?.image?.alt || ""}
           title={post.data?.title || ""}

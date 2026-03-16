@@ -28,23 +28,27 @@ const baseSchema = z.object({
   updatedDate: z.coerce.date().optional(),
 });
 
-const muses = defineCollection({
-  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/muses" }),
+// --- 精准修改开始 ---
+
+const animation = defineCollection({
+  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/animation" }),
   schema: baseSchema,
 });
 
-const short_form = defineCollection({
-  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/short_form" }),
+const new_media = defineCollection({
+  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/new_media" }),
   schema: baseSchema,
 });
 
-const long_form = defineCollection({
-  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/long_form" }),
+const other_works = defineCollection({
+  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/other_works" }),
   schema: baseSchema,
 });
 
-const zeitweilig = defineCollection({
-  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/zeitweilig" }),
+// --- 精准修改结束 ---
+
+const about = defineCollection({
+  loader: glob({ pattern: "**\/[^_]*.mdx", base: "./src/content/about" }),
   schema: baseSchema,
 });
 
@@ -136,10 +140,10 @@ const cv = defineCollection({
 });
 
 export const collections = {
-  muses,
-  short_form,
-  long_form,
-  zeitweilig,
+  animation,   // 替换掉 muses
+  new_media,   // 替换掉 short_form
+  other_works, // 替换掉 long_form
+  about, 
   authors,
   cv,
 };

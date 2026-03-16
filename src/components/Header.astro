@@ -1,7 +1,7 @@
 ---
 import Hamburger from "./Hamburger.tsx";
 import Navigation from "./Navigation.astro";
-import ThemeToggle from "./ThemeToggle.astro";
+// import ThemeToggle from "./ThemeToggle.astro";  <-- 这里用 // 注释掉了引用
 import { getImage } from "astro:assets";
 import { CDN_FAVICON_URL } from "../consts";
 
@@ -28,7 +28,7 @@ const favicon_avif = await getImage({
         <div class="flex items-center h-[30px]">
           <a href="/" class="block">
             <img
-              class="favicon dark:invert w-[30px] h-[30px]"
+              class="favicon w-[30px] h-[30px]"
               src={favicon_avif.src}
               alt="Home"
               width="30"
@@ -42,9 +42,11 @@ const favicon_avif = await getImage({
       {
         !is404Page && (
           <>
-            <div class="flex items-center justify-center h-[30px] w-[30px]">
-              <ThemeToggle />
-            </div>
+            {/* 这里用的是 Astro/JSX 的注释方式，把 ThemeToggle 藏起来了
+              <div class="flex items-center justify-center h-[30px] w-[30px]">
+                <ThemeToggle />
+              </div>
+            */}
             <div class="flex items-center justify-center h-[30px] w-[30px]">
               <Hamburger client:idle />
             </div>

@@ -3,17 +3,22 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 import { sortByDate } from "../components/sortByDate";
-const pageTitle = "Long Form";
-const allLong_form = await getCollection("long_form");
+
+// ✅ 修改 1：显示标题改为 "Other Works"
+const pageTitle = "Other Works";
+
+// ✅ 修改 2：获取集合名改为 "other_works"
+const allPosts = await getCollection("other_works");
 ---
 
 <BaseLayout title={pageTitle} is404Page={false}>
   {
-    allLong_form
+    allPosts
       .sort(sortByDate)
       .map((post) => (
         <BlogPost
-          url={`/long_form/${post.id}/`}
+          /* ✅ 修改 3：跳转路径改为新的文件夹名 /other_works/ */
+          url={`/other_works/${post.id}/`}
           image={post.data?.image?.src || ""}
           alt={post.data?.image?.alt || ""}
           title={post.data?.title || ""}

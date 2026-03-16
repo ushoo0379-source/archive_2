@@ -3,7 +3,9 @@ import Homepage from "../components/Homepage.astro";
 import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
 
-const collections = ["long_form", "short_form", "muses", "zeitweilig"] as const;
+// ✅ 修改 1：这里的名字必须和 config.ts 里的 export 对齐
+const collections = ["other_works", "new_media", "animation", "zeitweilig"] as const;
+
 let allImages: { large: string[]; medium: string[]; small: string[] } = {
   large: [],
   medium: [],
@@ -13,7 +15,9 @@ let allAlts: string[] = [];
 let allUrls: string[] = [];
 
 for (const collection of collections) {
+  // ✅ 这里的 collection 变量现在会依次取到 animation 等新名字
   const allContent = await getCollection(collection);
+  
   const postsWithImages = allContent.filter(
     (post) => post.data.image?.src && post.data.image?.alt,
   );
@@ -55,6 +59,7 @@ for (const collection of collections) {
       medium: mediumImage.src,
       small: smallImage.src,
       alt: image.alt,
+      // ✅ 修改 2：确保点击图片跳转到的 URL 也是新路径
       url: `/${collection}/${post.id}`,
     };
   });
@@ -95,6 +100,7 @@ const imageSizes = {
       height={imageSizes.height}
     />
   ) : (
+    /* 这里就是你看到报错的地方，只要上面的 collections 对了，这里就会消失 */
     <p>No images found</p>
   )
 }

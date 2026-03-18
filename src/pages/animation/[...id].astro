@@ -29,29 +29,15 @@ const formattedDate = date.toLocaleDateString('en-US', {
     crossorigin="anonymous"
   />
 
-  <div class="max-w-3xl mx-auto px-6 py-12">
+  <div class="max-w-6xl mx-auto px-6 py-12">
     <header class="mb-12 border-b border-gray-200 dark:border-gray-800 pb-8">
       <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4 font-overpass-mono">
         {post.data.title}
       </h1>
       <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-4">
-        <time datetime={post.data.pubDate.toString()}>{formattedDate}</time>
-        {post.data.author && <span>· {post.data.author}</span>}
+       
       </div>
-    </header>
-
-    {post.data.image && post.data.image.src && (
-      <div class="mb-12 aspect-video bg-gray-100 dark:bg-gray-900">
-        <img
-          src={post.data.image.src}
-          alt={post.data.image.alt || post.data.title}
-          class="w-full h-full object-cover"
-          style={{
-            objectPosition: `${post.data.image.positionx || '50%'} ${post.data.image.positiony || '50%'}`
-          }}
-        />
-      </div>
-    )}
+    
 
     <Prose>
       <div class="animation-content">

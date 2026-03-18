@@ -75,6 +75,24 @@ for (const collection of collections) {
   });
 }
 
+// 🚀 新增：在这里进行随机排序 (Fisher-Yates Shuffle)
+// 我们需要同步打乱所有关联数组，确保图片、Alt和URL仍然一一对应
+const totalItems = allImages.large.length;
+for (let i = totalItems - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  
+  // 交换图片路径
+  [allImages.large[i], allImages.large[j]] = [allImages.large[j], allImages.large[i]];
+  [allImages.medium[i], allImages.medium[j]] = [allImages.medium[j], allImages.medium[i]];
+  [allImages.small[i], allImages.small[j]] = [allImages.small[j], allImages.small[i]];
+  
+  // 交换 Alt 文本
+  [allAlts[i], allAlts[j]] = [allAlts[j], allAlts[i]];
+  
+  // 交换 跳转链接
+  [allUrls[i], allUrls[j]] = [allUrls[j], allUrls[i]];
+}
+
 const imageSizes = {
   width: {
     large: 1920,

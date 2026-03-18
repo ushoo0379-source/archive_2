@@ -1,24 +1,75 @@
 ---
 import { getCollection, render } from "astro:content";
-import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
-import { buildDetailPaths } from "../../scripts/collections";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Prose from "../../components/Prose.astro";
 
 export async function getStaticPaths() {
-  const entries = await getCollection("long_form");
-  return buildDetailPaths(entries);
+  // 抓取 other_works 集合
+  const posts = await getCollection("other_works"); 
+  return posts.map((post) => ({
+    // ✅ 这样无论你 MDX 里的文件名带不带日期，只要 slug 对了就能访问
+    params: { id: post.data.slug || post.id }, 
+    props: { post },
+  }));
 }
 
-const { entry } = Astro.props;
-const { Content, remarkPluginFrontmatter } = await render(entry);
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const date = new Date(post.data.pubDate);
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 ---
 
-<MarkdownPostLayout
-  frontmatter={entry.data}
-  currentId={entry.id}
-  collection="long_form"
->
-  <p class="prose prose-slate dark:prose-invert italic no-underline">
-    {remarkPluginFrontmatter.minutesRead}
-  </p>
-  <Content />
-</MarkdownPostLayout>
+<BaseLayout title={post.data.title}>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    crossorigin="anonymous"
+  />
+
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <header class="mb-12 border-b border-gray-200 dark:border-gray-800 pb-8">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4 font-overpass-mono">
+        {post.data.title}
+      </h1>
+      <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-4">
+        <time datetime={post.data.pubDate.toString()}>{formattedDate}</time>
+        {post.data.author && <span>· {post.data.author}</span>}
+      </div>
+    </header>
+
+    <Prose>
+      <div class="otherworks-content">
+        <Content />
+      </div>
+    </Prose>
+
+    {post.data.tags && post.data.tags.length > 0 && (
+      <footer class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800">
+        <div class="flex flex-wrap gap-2">
+          {post.data.tags.map((tag: string) => (
+            <span class="text-gray-600 dark:text-gray-400 text-xs font-medium">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </footer>
+    )}
+  </div>
+</BaseLayout>
+
+<style is:global>
+  .otherworks-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 2rem 0;
+  }
+  .otherworks-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.75;
+  }
+</style>

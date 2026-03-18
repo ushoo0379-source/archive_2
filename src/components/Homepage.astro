@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 export interface Props {
   title: string;
-  images: string; // 这是一个 JSON 字符串
+  images: string; 
   alt: string;
   urls: string;
   width: Record<string, number>;
@@ -12,17 +12,20 @@ export interface Props {
 
 const { title, images, alt, urls } = Astro.props;
 
-// 解析传递过来的数据
-const parsedImages = JSON.parse(images).small; // 我们用 small 尺寸，加载快且整齐
+const parsedImages = JSON.parse(images).small; 
 const parsedUrls = JSON.parse(urls);
 const parsedAlts = JSON.parse(alt);
 ---
 
 <BaseLayout title={title} is404Page={false}>
   <section class="showreel-container">
-    <video autoplay loop muted playsinline class="showreel-video">
-      <source src="/showreel.mp4" type="video/mp4" />
-    </video>
+    <div class="video-wrapper">
+      <iframe 
+        src="https://www.youtube.com/embed/v_eXhBZtpIk?autoplay=1&mute=1&loop=1&playlist=v_eXhBZtpIk&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
     <div class="showreel-overlay">
       <h1 class="showreel-title">SELECTED WORKS</h1>
       <p class="showreel-subtitle">2024 - 2026</p>
@@ -48,64 +51,96 @@ const parsedAlts = JSON.parse(alt);
 </BaseLayout>
 
 <style>
-  /* Showreel 样式 */
   .showreel-container {
     position: relative;
     width: 100%;
-    height: 80vh; 
     background: #000;
     overflow: hidden;
-    margin-bottom: 0.5rem; /* 减少间距，让网格贴得更近 */
+    margin-bottom: 2px;
+    /* 核心修复：给容器一个基于屏幕宽度的比例高度，确保在不同屏幕下不压扁 */
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
-  .showreel-video { width: 100%; height: 100%; object-fit: cover; }
-  .showreel-overlay {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: rgba(0, 0, 0, 0.2); color: white; pointer-events: none;
-  }
-  .showreel-title { font-size: 3rem; font-weight: 800; letter-spacing: -0.05em; margin: 0; }
 
-  /* 密集网格核心样式 */
+  .video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    /* 消除 YouTube 默认的上下边距偏移 */
+    display: block;
+  }
+
+  .showreel-overlay {
+    position: absolute; 
+    inset: 0;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2); 
+    color: white; 
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .showreel-title { 
+    font-size: clamp(1.5rem, 6vw, 4rem);
+    font-weight: 800; 
+    letter-spacing: -0.05em; 
+    margin: 0; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+
+  .showreel-subtitle {
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    font-family: monospace;
+    letter-spacing: 0.2em;
+    opacity: 0.8;
+  }
+
+  /* 下方网格逻辑 */
   .grid-wrapper {
     width: 100%;
-    padding: 2px; /* 极细的外边距 */
+    padding: 0 2px;
   }
 
   .thumbnail-grid {
     display: grid;
-    /* 核心：一行显示 6 个，手机显示 3 个 */
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px; /* 连在一起的感觉 */
+    gap: 2px;
   }
 
   @media (min-width: 1024px) {
     .thumbnail-grid {
-      grid-template-columns: repeat(6, 1fr); /* 电脑端一行 6 个 */
+      grid-template-columns: repeat(6, 1fr);
     }
   }
 
   .thumb-item {
     position: relative;
-    aspect-ratio: 1 / 1; /* 强制正方形 */
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: #eee;
+    background: #111;
   }
 
   .thumb-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .thumb-item:hover .thumb-img {
-    transform: scale(1.1); /* 悬停缩放 */
   }
 
   .thumb-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;

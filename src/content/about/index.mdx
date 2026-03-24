@@ -9,13 +9,26 @@ tags: []
 ---
 
 <style>{`
+  /* 隐藏标题、分割线和原始标签 */
   h1:first-of-type,
   .border-b,
   .mb-16,
   [class*="tags"],
-  .italic.no-underline,
-  a[href^="/author/"] { 
+  .italic.no-underline { 
     display: none !important; 
+  }
+
+  /* 暴力隐藏所有包含作者链接或名字的底层元素 */
+  a[href*="author"],
+  [class*="author"],
+  footer,
+  .mt-auto.flex.items-center,
+  div:has(> a[href*="author"]) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 `}</style>
 
@@ -30,6 +43,7 @@ tags: []
   <p style="color: #dc4200; font-size: 2rem;">About Me</p>
 </div>
 
-### About Me
 
-Hi! My name is Yushu Li
+Hi! I’m Yushu Li (but feel free to call me Ushoo).
+I am a multidisciplinary artist originally from China, currently based in New York City. My creative journey began at the China Academy of Art, where I earned my Bachelor’s degree in Animation. I am currently deepening my practice as an MFA candidate in Computer Arts at the School of Visual Arts (SVA).
+I am a lifelong learner driven by curiosity. My work lives at the meeting point of traditional storytelling and emerging technology including 2D, 3D, and Stop Motion, while using programming to unlock new aesthetic possibilities. For me, art is an endless process of fusion, where logic and imagination collide to create something entirely new.

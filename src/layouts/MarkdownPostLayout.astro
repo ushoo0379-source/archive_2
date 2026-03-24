@@ -74,7 +74,6 @@ const metaImage = image
       loading: "lazy",
     })
   : null;
-
 ---
 
 <BaseLayout
@@ -125,29 +124,7 @@ const metaImage = image
   <div data-pagefind-body>
     <Prose>
       <slot />
-      <div class="flex flex-col sm:flex-row align-center">
-        <div class="w-full flex-col sm:w-1/2 text-center sm:text-left">
-          <p>
-            -- <a
-              href={`/authors/${author}`}
-              class="no-underline font-inconsolata"
-            >
-              {authorFullName}
-            </a>
-          </p>
-        </div>
-        <div
-          class="w-full flex-col sm:w-1/2 text-left sm:text-right mt-[10px] dark:text-white text-black font-inconsolata"
-        >
-          <div>
-            Published: {publishedDate}
-          </div>
-          <div>
-            Updated: {updatedDate}
-          </div>
-        </div>
-      </div>
-    </Prose>
+      </Prose>
   </div>
   <NextPost currentId={currentId} collection={collection} />
 </BaseLayout>
